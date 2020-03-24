@@ -1,26 +1,63 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
-
+import React, { useState } from 'react';
+import DisplayHeading from '@tds/core-display-heading'
+import Search from './components/Search';
+import Movies from './components/Movies';
+import axios from 'axios';
 function App() {
+
+
+  const [state, setState] = useState({
+    searchString: '',
+    results: []
+  })
+
+  const apiUrl = 'http://www.omdbapi.com/?i=tt3896198&apikey=56f4036e';
+
+  const handleInput = e => {
+    let movieSearchString = e.target.value;
+    setState(prevState => {
+      return { ...prevState, searchString: movieSearchString }
+    });
+  }
+
+  const search = (e) => {
+    if (e.key === 'Enter') {
+      axios(apiUrl + '&s=' + state.searchString).then(({ data }) => {
+        console.log(data)
+        if (data.Response == 'True') {
+          let results = data.Search;
+          console.log(results);
+          setState(prevState => {
+            return {
+              ...prevState,
+              results: results,
+            }
+          })
+          console.log('state', state)
+        } else if (data.Response == 'False') {
+          console.log('error')
+
+        }
+      })
+    }
+  }
+
+
+
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+    <div>
+      <header>
+        <DisplayHeading>Movie Database</DisplayHeading>
       </header>
-    </div>
+      <main>
+        <Search handleInput={handleInput} search={search} />
+        <Movies results={state.results} />
+
+      </main>
+    </div >
   );
 }
+
 
 export default App;
