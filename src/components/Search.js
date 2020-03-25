@@ -5,6 +5,7 @@ import Box from '@tds/core-box'
 import Heading from '@tds/core-heading'
 import Paragraph from '@tds/core-paragraph'
 import Button from '@tds/core-button'
+import Tooltip from '@tds/core-tooltip'
 
 function Search({ handleInput, search }) {
     return (
@@ -20,7 +21,11 @@ function Search({ handleInput, search }) {
 
                     <div>
                         <Input label=' Movie Name' hint='Enter movie you want to search and press Enter' hintPosition='below' placeholder='Enter Movie to Search'
-                            onChange={handleInput} onKeyPress={search} type='text' />
+                            onChange={handleInput} onKeyPress={search} type='text' tooltip={
+                                <Tooltip copy="en">
+                                    Type name of movie you want to search. Either type full name or type any substring of movie name
+                                </Tooltip>
+                            } />
                     </div>
                 </Box>
             </Card>
